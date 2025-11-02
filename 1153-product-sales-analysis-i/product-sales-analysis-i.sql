@@ -1,5 +1,11 @@
-/* Write your T-SQL query statement below */
-SELECT product_name, year, price 
-From Product as p
-Join Sales as s
-ON p.product_id = s.product_id  
+SELECT 
+    CASE 
+        WHEN s.product_id = p.product_id THEN p.product_name
+        ELSE 'Unknown'
+    END AS product_name,
+    s.year,
+    s.price
+FROM 
+    Sales s
+LEFT JOIN 
+    Product p ON s.product_id = p.product_id
