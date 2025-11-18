@@ -1,9 +1,7 @@
-SELECT 
-    s.user_id,
-    ROUND(AVG(CASE WHEN c.action = 'confirmed' THEN 1.0 ELSE 0.0 END), 2) AS confirmation_rate
-FROM 
-    Signups s
-LEFT JOIN 
-    Confirmations c ON s.user_id = c.user_id
-GROUP BY 
-    s.user_id;
+/* Write your T-SQL query statement below */
+select 
+    s.user_id, ROUND(AVG(CASE when c.action = 'confirmed' Then 1.0 else 0.0 end), 2) confirmation_rate
+from signups s
+left join confirmations c
+on s.user_id = c.user_id
+group by s.user_id
