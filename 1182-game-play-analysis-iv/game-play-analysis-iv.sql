@@ -1,7 +1,8 @@
-/* Write your T-SQL query statement below */
-with aa as (
-    select player_id, event_date, dateadd(day,1,min(event_date)over(partition by player_id)) d2
-    from activity
+WITH Fl AS (
+    SELECT player_id, MIN(event_date) as f1
+    FROM Activity
+    GROUP BY player_id
 )
-select round(sum(case when event_date = d2 then 1 else 0 end) *1.0/(select count(distinct player_id) from activity), 2) fraction
-from aa
+SELECT ROUND(COUNT(a.player_id) * 1.0 / (SELECT COUNT(*) FROM Fl),2) AS fraction
+FROM Fl f
+JOIN Activity a ON f.player_id = a.player_id AND a.event_date = DATEADD(day, 1, f.f1)
