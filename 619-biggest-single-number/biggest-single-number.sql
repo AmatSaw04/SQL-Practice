@@ -1,6 +1,6 @@
 /* Write your T-SQL query statement below */
 with aa as (
-    select num, count(num) co 
+    select num
     from MyNumbers
     group by num
     having count(num) = 1
