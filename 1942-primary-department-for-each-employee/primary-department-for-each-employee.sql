@@ -1,5 +1,9 @@
-SELECT employee_id, department_id
-FROM (SELECT *,
-Rank() OVER(PARTITION BY employee_id ORDER BY primary_flag DESC) AS rk 
-FROM Employee)AS cte 
-WHERE rk = 1
+/* Write your T-SQL query statement below */
+select employee_id, max(department_id) department_id
+from Employee  
+group by employee_id 
+having count(employee_id) = 1
+union 
+select employee_id, department_id 
+from Employee 
+where primary_flag = 'Y'
