@@ -1,7 +1,5 @@
-with aa as (
-    select *, count(*) over (partition by employee_id) cnt
-    from Employee   
-)
-select employee_id, department_id
-from aa
-where cnt = 1 or (cnt<>1 and primary_flag = 'Y' )
+SELECT employee_id, department_id
+FROM (SELECT *,
+Rank() OVER(PARTITION BY employee_id ORDER BY primary_flag DESC) AS rk 
+FROM Employee)AS cte 
+WHERE rk = 1
