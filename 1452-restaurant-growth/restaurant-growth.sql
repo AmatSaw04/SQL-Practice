@@ -1,5 +1,13 @@
-SELECT visited_on, sum(sum(amount)) OVER(ORDER BY visited_on ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) amount, ROUND(CAST(SUM(SUM(amount)) OVER(ORDER BY visited_on ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS FLOAT)/7.0 ,2) average_amount
-FROM Customer 
-GROUP BY visited_on
-ORDER BY visited_on
-OFFSET 6 ROWS
+with aa as
+(select visited_on, sum(amount) as amount
+from customer group by visited_on
+)
+select visited_on, total_amount amount, round(average_amount,2) average_amount from (
+select *, 
+sum(amount) over(order by visited_on rows between 6 preceding and current row)
+ as total_amount,
+avg(amount*1.0) over(order by visited_on rows between 6 preceding and current row)
+ as average_amount,
+row_number() over(order by visited_on) as rn
+from aa ) a
+where a.rn>6
